@@ -1,0 +1,10 @@
+.character__wrapper {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.character {
+    display: flex;
+    border: 1px solid whitesmoke;
+}

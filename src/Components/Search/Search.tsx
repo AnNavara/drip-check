@@ -7,14 +7,18 @@ type Props = {};
 
 const Search = (props: Props) => {
     const [account, setAccount] = useState<string>('');
-    const { isLoading, characters, refetch, isFetching } = useAccount(account, 'pc');
+    const { isLoading, characters, refetch, isFetching } = useAccount(
+        account,
+        'pc'
+    );
 
     return (
         <>
-            <>
+            <div className={styles.seach}>
                 <label>
                     Account Name: &nbsp;
                     <input
+                        className={styles.input}
                         value={account}
                         onChange={(event) => {
                             setAccount(event.target.value);
@@ -22,17 +26,11 @@ const Search = (props: Props) => {
                         type="text"
                     />
                 </label>
-                <button onClick={() => refetch()} type="button">
+                <button className={styles.btn} onClick={() => refetch()} type="button">
                     Find Account
                 </button>
-            </>
-            {isLoading || isFetching ? (
-                <div>Loading</div>
-            ) : characters?.length ? (
-                <Characters characterList={characters} />
-            ) : (
-                <div>Account not found</div>
-            )}
+            </div>
+            <Characters isFetching={isFetching} isLoading={isLoading} characters={characters} />
         </>
     );
 };

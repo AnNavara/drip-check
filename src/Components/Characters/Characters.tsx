@@ -1,26 +1,37 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { ICharacters } from '../../services/character.service';
 import styles from './Characters.module.css';
 
 type Props = {
-    characterList: ICharacters[];
+    isLoading: boolean;
+    isFetching: boolean;
+    characters: ICharacters[] | undefined;
 };
 
-const Characters = ({ characterList }: Props) => {
+const Characters = ({ isLoading, isFetching, characters }: Props) => {
     return (
         <div className={styles.character__wrapper}>
-            {characterList.map((character: ICharacters) => {
+            {isLoading || isFetching ? (
+                <div>Loading</div>
+            ) : characters?.length ? (
+                <div className={styles.character__wrapper}>
+                    {characters.map((character: ICharacters) => {
                 return (
-                    <section key={character.name} className={styles.character}>
+                    <Link key={character.name} className={styles.character} to={`characters/${character.name}`}>
                         <div>{character.class}&nbsp;</div>
                         <div>{character.league}</div>
                         <header>
                             <h2>{character.name}</h2>
                         </header>
                         <div>{character.level}</div>
-                    </section>
+                    </Link>
                 );
             })}
+                </div>
+            ) : (
+                <div>Account not found</div>
+            )}
         </div>
     );
 };

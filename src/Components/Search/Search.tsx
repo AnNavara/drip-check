@@ -1,33 +1,35 @@
-import React from 'react';
-import { useQuery } from 'react-query';
-import { CharacterService } from '../../services/character.service';
+import React, { useState } from 'react';
+import { useAccount } from '../../hooks/useAccount';
 import Characters from '../Characters/Characters';
 import styles from './Search.module.css';
 
 type Props = {};
 
 const Search = (props: Props) => {
-    const {
-        isLoading,
-        data: response,
-        // error,
-    } = useQuery(['character list'], () =>
-        CharacterService.getAll('dtnhdantalian', 'pc')
-    );
+    const [account, setAccount] = useState<string>('');
+    const { isLoading, characters, refetch, isFetching } = useAccount(account, 'pc');
 
     return (
         <>
             <>
                 <label>
                     Account Name: &nbsp;
-                    <input type="text" />
+                    <input
+                        value={account}
+                        onChange={(event) => {
+                            setAccount(event.target.value);
+                        }}
+                        type="text"
+                    />
                 </label>
-                <button type="submit">Find Account</button>
+                <button onClick={() => refetch()} type="button">
+                    Find Account
+                </button>
             </>
-            {isLoading ? (
+            {isLoading || isFetching ? (
                 <div>Loading</div>
-            ) : response?.data.length ? (
-                <Characters characterList={response} />
+            ) : characters?.length ? (
+                <Characters characterList={characters} />
             ) : (
                 <div>Account not found</div>
             )}
